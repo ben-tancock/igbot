@@ -8,6 +8,8 @@ from random import randrange
 
 
 
+# pip install -r requirements.txt
+
 
 
 posts_file = open('posts.txt')
@@ -96,7 +98,6 @@ class InstaBot :
         print('test like post')
         self.driver.get(url)
         # xpath of the like button
-        # /html/body/div[1]/section/main/div/div[1]/article/div[3]/section[1]/span[1]/button
         #self.driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/article/div[3]/section[1]/span[1]/button').click()
         sleep(3)
 
