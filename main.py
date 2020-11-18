@@ -11,8 +11,8 @@ s = sched.scheduler(time.time, time.sleep)
 
 # pip install -r requirements.txt
 
-# scheduler.enter(delay, priority, action, argument=(), kwargs={})
-
+username = '' # put your username and passwords here
+password = ''
 
 
 posts_file = open('posts.txt')
@@ -60,7 +60,7 @@ class InstaBot :
 
         
        
-        
+        self.login()
 
         sleep(4)
 
@@ -190,7 +190,7 @@ class InstaBot :
 #   random, organic, and not repeat on posts/hashtags you've
 #   already interacted with?
 links = []
-my_bot = InstaBot('billybob35341', 'notabot123')
+my_bot = InstaBot(username, password)
 
 
 
