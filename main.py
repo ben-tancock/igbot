@@ -1,4 +1,5 @@
-import pathlib
+#import pathlib
+import sched, time
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -6,9 +7,11 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from random import randrange
 
-
+s = sched.scheduler(time.time, time.sleep)
 
 # pip install -r requirements.txt
+
+# scheduler.enter(delay, priority, action, argument=(), kwargs={})
 
 
 
@@ -30,6 +33,12 @@ comment_arr = [
                        ['great', 'awesome', 'good', 'cool', 'fantastic']
             ]
 
+
+# starttime = time.time()
+# while True:
+#    print "tick"
+#    time.sleep(60.0 - ((time.time() - starttime) % 60.0))
+
 class InstaBot :
     def __init__(self, username, password): # need username and pw, take these as inputs
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -45,10 +54,13 @@ class InstaBot :
         unfollow_break_max = 50
         # this is the array of comments the bot will comment on posts it interacts with
 
+        
 
 
-        # self.login()
 
+        
+       
+        
 
         sleep(4)
 
@@ -61,20 +73,22 @@ class InstaBot :
         sleep(4)
         print(new_posts)
 
+        posts_liked = 0
+        starttime = time.time()
 
-
-        like_count = 0
-        while like_count < max_likes_per_day: # should have 2nd nested while for likes per tag?
+        while posts_liked < max_likes_per_day: # should have 2nd nested while for likes per tag?
             rand_num = randrange(0, len(new_posts)) # need to pop off elements from new post when they've been interacted with
             self.interact(new_posts[rand_num], new_posts, rand_num)
-            like_count += 1
+            posts_liked += 1
+            time.sleep(3.0 - ((time.time() - starttime) % 3.0)) # does this loop every 3 seconds
+
 
         # Should have new posts and previously interacted posts arr
-
 
         self.driver.close()
 
 
+    
 
     def login(self):
         self.driver.get("https://instagram.com")
@@ -82,6 +96,10 @@ class InstaBot :
         self.driver.find_element_by_xpath("//input[@name='username']").send_keys('')
         self.driver.find_element_by_xpath("//input[@name='password']").send_keys('')
         self.driver.find_element_by_xpath("//button[@type='submit']").click()
+
+    #def execute(self):
+
+
 
     def interact(self, url, arr, index):
         self.like_post(url)
@@ -94,6 +112,7 @@ class InstaBot :
         f.close()
         print('test interaction')
 
+
     def like_post(self, url):  # like certain posts based on hash or username
         print('test like post')
         self.driver.get(url)
@@ -101,13 +120,13 @@ class InstaBot :
         #self.driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/article/div[3]/section[1]/span[1]/button').click()
         sleep(3)
 
+
     def follow(self):
         print('test following')
         # assuming we're on a post page, we have to:
         # 1: click their profile link
         # 2: find the follow button
         # 3: click it
-
         profile_link = self.driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div[1]/article/header/div[2]/div[1]/div[1]/span/a')
         profile_link.click()
         sleep(4)
@@ -115,7 +134,10 @@ class InstaBot :
         follow_button.click()
 
 
-
+    def unfollow(self, user_url):
+        self.driver.get(user_url)
+        sleep(4)
+        self.follow()
 
 
     def comment(self, url): # This works!!! don't change it for now!!!
@@ -131,6 +153,7 @@ class InstaBot :
         # post button
         # /html/body/div[1]/section/main/div/div[1]/article/div[3]/section[3]/div/form/button
 
+
     def gen_comment(self):
         print('test comment gen')
         comment = ''
@@ -141,9 +164,11 @@ class InstaBot :
         print(comment)
         return comment
 
+
     def search_hashtags(self, hashtag):
         print('test hashtags')
         self.driver.get("https://instagram.com/explore/tags/" + hashtag)
+
 
     def collect_links(self, arr): # figure out how much to scroll to repeat this without adding duplicates
         print('testing link gathering')
@@ -159,9 +184,6 @@ class InstaBot :
                     #f.close()
                 else:
                     print('duplicate detected')
-
-
-
 
 
 #   how to determine bot liking behaviour to appear
